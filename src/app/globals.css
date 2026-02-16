@@ -1,0 +1,174 @@
+/* styles/global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-size: 16px;
+  }
+  
+  h1 {
+    font-size: 2.75rem; /* Equivalent to 44px font weight should be medium*/
+    font-weight: 700; 
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 2.25rem; /* Equivalent to 36px semi bold italic*/
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: 2rem; /* Equivalent to 32px semi bold italic*/
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  
+  h4 {
+    font-size: 1.75rem; /* Equivalent to 28px */
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  
+  h5 {
+    font-size: 1.5rem; /* Equivalent to 24px */
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  
+  h6 {
+    font-size: 1.25rem; /* Equivalent to 20px */
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  
+  p {
+    font-size: 1rem; /* Equivalent to 16px */
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  li {
+    font-size: 1rem; /* Equivalent to 16px */
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  .btn_sapna{background: #fff; padding: 0px; border-radius: 30px; border: 1px solid #383085; }
+  .btn_bookswagon{background: #fff; padding: 0px; border-radius: 30px; border: 1px solid #bd2029; }
+
+  /* Responsive styles for mobile Footer*/
+@media (max-width: 768px) {
+ 
+  /* Hide unnecessary elements */
+  .footer-bg, /* Hides the wave background */
+  .text-3xl, /* Hides the main heading */
+  .flex.flex-wrap.space-x-4.md\:space-x-6.justify-center.text-sm.md\:text-xl.pt-5.pb-6.font-light,
+  .flex.flex-wrap.gap-2.justify-center.text-sm.md\:text-2xl.space-x-4.md\:space-x-8.pt-5.font-normal,
+  .flex.flex-wrap.justify-center.text-xs.md\:text-base.font-light.pt-4.space-x-4.md\:space-x-6 {display: none;}
+}
+  /* Show only the essential elements */
+  .relative.z-10.flex.flex-col.items-center {
+      flex-direction: column; /* Stack items vertically */
+  }
+
+  .text-md.md\:text-base.font-light.pb-4.text-center {
+      font-size: 0.875rem; /* Smaller font size for copyright */
+  }
+
+.footer-bg-image {
+  background-image: url('../app/assests/image/bg_design.png'); 
+  background-repeat: no-repeat;
+  background-size: 55%;
+  background-position: 100% 100%; /* Position the image */
+  background-attachment: fixed;
+}
+.navmain{
+  background-image: url('../app/assests/image/bg_navbar.png'); 
+  background-size: contain;
+  background-position: 90% 50%;
+  font-family: "IBM Plex Serif";
+
+}
+.navmain .navbar .ifont{
+  font-family: "IBM Plex Serif";
+  font-size: 20px;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) { /* Adjust the max-width as needed for tablet and mobile */
+  .navmain {
+    background-image: none; /* Hide the background image */
+  }
+  .footer-bg-image {
+    background-image: url('../app/assests/image/bg_design.png'); 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 100% 100%; /* Position the image */
+    background-attachment: fixed;
+  }
+}
+/* Responsive adjustments */
+@media (width: 768px) {
+  .footer-bg-image {
+      background-position: right bottom; /* Maintain positioning on smaller screens */
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Tailwind utility to hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Custom scrollbar for spotlight carousel */
+.overflow-x-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.overflow-x-scroll::-webkit-scrollbar-thumb {
+  background: #FF8100;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.overflow-x-scroll::-webkit-scrollbar-thumb:hover {
+  background: #e67300;
+}
+
+/* Smooth slide animation for spotlight - right to left */
+@keyframes slide-in {
+  from {
+    transform: translateX(100px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+  
+  
