@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { getApiUrl } from "@/lib/apiConfig";
 
 const DISPLAY_TABS = [
   { label: "Bestsellers", value: "Bestsellers" },
@@ -64,33 +63,62 @@ export default function BookDiscovery() {
   const [booksByCategory, setBooksByCategory] = useState({});
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+  //   const fetchAllBooks = async () => {
+  //     try {
+  //       setLoading(true);
+
+  //       const results = await Promise.all(
+  //         DISPLAY_TABS.map(async ({ value }) => {
+  //           const res = await fetch(
+  //             `https://dashboard.bluone.ink/api/public/books?category=${encodeURIComponent(
+  //               value
+  //             )}`,
+  //             { cache: "no-store" }
+  //           );
+  //           const data = await res.json();
+  //           return [value, Array.isArray(data) ? data : []];
+  //         })
+  //       );
+
+  //       setBooksByCategory(Object.fromEntries(results));
+  //     } catch (err) {
+  //       console.error(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchAllBooks();
+  // }, []);
+
   useEffect(() => {
-    const fetchAllBooks = async () => {
+    const fetchBooks = async () => {
       try {
         setLoading(true);
-
-        const results = await Promise.all(
-          DISPLAY_TABS.map(async ({ value }) => {
-            const res = await fetch(
-              `${getApiUrl("/api/public/books")}?category=${encodeURIComponent(
-                value
-              )}`,
-              { cache: "no-store" }
-            );
-            const data = await res.json();
-            return [value, Array.isArray(data) ? data : []];
-          })
+  
+        const res = await fetch(
+          "https://dashboard.bluone.ink/api/v1/public/books-list",
+          { cache: "no-store" }
         );
-
-        setBooksByCategory(Object.fromEntries(results));
+  
+        const data = await res.json();
+  
+        // Map API response to your tabs
+        setBooksByCategory({
+          "Bestsellers": data.bestsellers || [],
+          "New-Releases": data.newReleases || [],
+          "Coming-Soon": data.comingSoon || [],
+        });
+  
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchAllBooks();
+  
+    fetchBooks();
   }, []);
 
   const visibleBooks = useMemo(() => {
