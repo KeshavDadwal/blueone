@@ -6,7 +6,6 @@ import Link from "next/link";
 import { MdOutlineArrowLeft, MdOutlineArrowRight } from "react-icons/md";
 import { HelmetProvider } from "react-helmet-async";
 import { Helmet } from "react-helmet";
-import { getApiUrl } from "@/lib/apiConfig";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,7 +39,7 @@ export default function Page() {
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
-        const response = await fetch(getApiUrl("/api/public/gallery"));
+        const response = await fetch("https://dashboard.bluone.ink/api/public/gallery");
         const data = await response.json();
         setGallery(data);
         setLoading(false);

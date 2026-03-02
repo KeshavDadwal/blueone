@@ -1,10 +1,9 @@
 'use client';
-import { getApiUrl } from "@/lib/apiConfig";
 
 export const allBlogsList = async (page = 1, limit = 10) => {
   try {
     const response = await fetch(
-      `${getApiUrl("/api/public/blogs")}?page=${page}&limit=${limit}`
+      `https://dashboard.bluone.ink/api/public/blogs?page=${page}&limit=${limit}`
     );
     
     if (!response.ok) {
@@ -32,7 +31,9 @@ export const allBlogsList = async (page = 1, limit = 10) => {
 // Function to get all blogs for filtering
 export const getAllBlogs = async () => {
   try {
-    const response = await fetch(getApiUrl("/api/public/blogs"));
+    const response = await fetch(
+      `https://dashboard.bluone.ink/api/public/blogs`
+    );
     
     if (!response.ok) {
       throw new Error('Failed to fetch blogs');

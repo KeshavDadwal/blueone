@@ -4,13 +4,12 @@ import { useState, useEffect } from "react";
 import Loader from "@/app/components/Loader";
 import Link from "next/link";
 import { Helmet } from "react-helmet";
-import { getApiUrl } from "@/lib/apiConfig";
 
 const Page = ({ params }) => {
   const galleryslug = decodeURIComponent(params.galleryslug);
 
   // API URL dynamic slug ke sath
-  const apiUrl = getApiUrl(`/api/public/gallery/${galleryslug}`);
+  const apiUrl = `https://dashboard.bluone.ink/api/public/gallery/${galleryslug}`;
 
   const [galleryData, setGalleryData] = useState(null);
   const [loading, setLoading] = useState(true);

@@ -1,7 +1,6 @@
 // API functions for fetching authors data
-import { getApiUrl } from "@/lib/apiConfig";
 
-const BASE_URL = getApiUrl("/api/public/authors");
+const BASE_URL = "https://dashboard.bluone.ink/api/public/authors";
 
 /**
  * Fetch all authors

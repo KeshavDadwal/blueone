@@ -8,7 +8,6 @@ import { IoCloseSharp } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { getApiUrl } from "@/lib/apiConfig";
 
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,7 +65,7 @@ function NavBar() {
 
         for (const category of allCategories) {
           try {
-            const res = await fetch(`${getApiUrl("/api/public/books")}?category=${encodeURIComponent(category.slug)}`);
+            const res = await fetch(`https://dashboard.bluone.ink/api/public/books?category=${encodeURIComponent(category.slug)}`);
             if (res.ok) {
               const data = await res.json();
               bookCounts[category.label] = data.length || 0;
@@ -89,7 +88,7 @@ function NavBar() {
   useEffect(() => {
     const fetchAllBooks = async () => {
       try {
-        const res = await fetch(getApiUrl("/api/public/books"));
+        const res = await fetch("https://dashboard.bluone.ink/api/public/books");
         if (res.ok) {
           const data = await res.json();
           setAllBooks(data);

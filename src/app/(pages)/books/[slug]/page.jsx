@@ -16,7 +16,6 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import ScriptLoader from "@/app/ScriptLoader";
 import { useRouter } from "next/navigation";
 import AddToAnyShare from "@/app/components/ImagePreviewSection";
-import { getApiUrl } from "@/lib/apiConfig";
 
 const LANGUAGE_PRIORITY = [
   "ENGLISH",
@@ -177,7 +176,7 @@ const Page = ({ params }) => {
         }));
 
         // Fetch related books
-        const relatedResponse = await fetch(getApiUrl("/api/public/books"));
+        const relatedResponse = await fetch(`https://dashboard.bluone.ink/api/public/books`);
         if (relatedResponse.ok) {
           const allBooksResponse = await relatedResponse.json();
           setAllBooks(allBooksResponse);

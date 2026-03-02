@@ -9,7 +9,6 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
-import { getApiUrl } from "@/lib/apiConfig";
 
 const ALLOWED_CATEGORIES = ["Fiction", "Non-Fiction", "Children"];
 
@@ -187,8 +186,8 @@ export default function BooksPage() {
     async function fetchCategories() {
       try {
         const [catRes, bookRes] = await Promise.all([
-          fetch(getApiUrl("/api/public/categories")),
-          fetch(getApiUrl("/api/public/books")),
+          fetch("https://dashboard.bluone.ink/api/public/categories"),
+          fetch("https://dashboard.bluone.ink/api/public/books"),
         ]);
 
         const data = await catRes.json();

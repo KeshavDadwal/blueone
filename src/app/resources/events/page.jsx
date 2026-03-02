@@ -9,7 +9,6 @@ import { MdOutlineArrowLeft, MdOutlineArrowRight } from "react-icons/md";
 import { HelmetProvider } from "react-helmet-async";
 import { Helmet } from "react-helmet";
 import Image from "next/image";
-import { getApiUrl } from "@/lib/apiConfig";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,7 +25,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const response = await fetch(getApiUrl("/api/public/events"));
+        const response = await fetch("https://dashboard.bluone.ink/api/public/events");
         const data = await response.json();
         const mappedEvents = data.map((event) => ({
           id: event.id,

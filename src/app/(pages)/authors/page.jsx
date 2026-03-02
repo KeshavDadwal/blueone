@@ -8,7 +8,6 @@ import Loader from "@/app/components/Loader";
 import { MdOutlineArrowLeft, MdOutlineArrowRight } from "react-icons/md";
 import { HelmetProvider } from "react-helmet-async";
 import { Helmet } from "react-helmet";
-import { getApiUrl } from "@/lib/apiConfig";
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +23,7 @@ export default function Home() {
   useEffect(() => {
     const fetchAuthors = async () => {
       try {
-        const response = await fetch(getApiUrl("/api/public/authors"));
+        const response = await fetch("https://dashboard.bluone.ink/api/public/authors");
         const data = await response.json();
         setAuthorsList(data);
         setLoading(false);

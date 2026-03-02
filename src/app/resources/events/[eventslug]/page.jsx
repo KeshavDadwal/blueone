@@ -4,7 +4,6 @@ import Loader from "@/app/components/Loader";
 import Link from "next/link";
 import { Helmet } from "react-helmet";
 import { processEventData } from "@/app/API/eventUtils";
-import { getApiUrl } from "@/lib/apiConfig";
 
 const Page = ({ params }) => {
   const eventslug = decodeURIComponent(params.eventslug);
@@ -15,7 +14,7 @@ const Page = ({ params }) => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(getApiUrl(`/api/public/events/${eventslug}`));
+        const response = await fetch(`https://dashboard.bluone.ink/api/public/events/${eventslug}`);
         if (!response.ok) {
           throw new Error('Event not found');
         }

@@ -1,10 +1,9 @@
 'use client';
-import { getApiUrl } from "@/lib/apiConfig";
 
 export const getAllAuthors = async (page = 1, limit = 10) => {
   try {
     const response = await fetch(
-      `${getApiUrl("/api/public/books/search")}?page=${page}&limit=${limit}`
+      `https://dashboard.bluone.ink/api/public/books/search?page=${page}&limit=${limit}`
     );
     
     if (!response.ok) {

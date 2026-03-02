@@ -1,9 +1,8 @@
 /**
  * API utilities for fetching hero section data from BluOne Ink API
  */
-import { getApiUrl } from "@/lib/apiConfig";
 
-const API_BASE_URL = getApiUrl("/api/public");
+const API_BASE_URL = "https://dashboard.bluone.ink/api/public";
 
 /**
  * Fetches all active hero sections from the API

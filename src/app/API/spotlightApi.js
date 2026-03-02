@@ -1,7 +1,6 @@
 // API functions for fetching spotlight data
-import { getApiUrl } from "@/lib/apiConfig";
 
-const BASE_URL = getApiUrl("/api/public/spotlight");
+const BASE_URL = "https://dashboard.bluone.ink/api/public/spotlight";
 
 /**
  * Fetch all active spotlights

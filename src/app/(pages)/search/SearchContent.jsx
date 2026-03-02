@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
-import { getApiUrl } from "@/lib/apiConfig";
 
 export default function SearchContent() {
   const searchParams = useSearchParams();
@@ -29,7 +28,7 @@ export default function SearchContent() {
       setLoading(true);
       try {
         const res = await fetch(
-          `${getApiUrl("/api/public/books")}?search=${encodeURIComponent(query)}`
+          `https://dashboard.bluone.ink/api/public/books?search=${encodeURIComponent(query)}`
         );
         if (res.ok) {
           const data = await res.json();

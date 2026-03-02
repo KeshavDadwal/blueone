@@ -12,7 +12,6 @@ import {FaLinkedinIn,FaFacebookF,FaInstagram,FaYoutube,FaTwitter,} from "react-i
 import SpotlightMedia from "@/app/components/SpotlightMedia";
 import Spotlight from "@/app/components/Spotlight";
 import { fetchSpotlights } from "@/app/API/spotlightApi";
-import { getApiUrl } from "@/lib/apiConfig";
 
 
 const Page = ({ params }) => {
@@ -29,7 +28,7 @@ const Page = ({ params }) => {
     const fetchAuthorData = async () => {
       try {
         const response = await fetch(
-          getApiUrl(`/api/public/authors/${authslug}`)
+          `https://dashboard.bluone.ink/api/public/authors/${authslug}`
         );
         
         if (!response.ok) {
@@ -44,7 +43,7 @@ const Page = ({ params }) => {
         }
 
         // Fetch all books to find books where this author is either the main author or a writer
-        const booksResponse = await fetch(getApiUrl("/api/public/books") + "?limit=500");
+        const booksResponse = await fetch("https://dashboard.bluone.ink/api/public/books?limit=500");
         if (!booksResponse.ok) {
           throw new Error(`HTTP error! status: ${booksResponse.status}`);
         }

@@ -10,7 +10,6 @@ import Image from "next/image";
 import { Helmet } from "react-helmet";
 import { processBlogData } from "@/app/API/blogUtils";
 import { getAllBlogs } from "@/app/API/allBlogsList";
-import { getApiUrl } from "@/lib/apiConfig";
 
 const Page = ({ params }) => {
   const blogslug = decodeURIComponent(params.blogslug);
@@ -26,7 +25,7 @@ const Page = ({ params }) => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await fetch(getApiUrl(`/api/public/blogs/${blogslug}`));
+        const response = await fetch(`https://dashboard.bluone.ink/api/public/blogs/${blogslug}`);
         if (!response.ok) {
           throw new Error("Blog not found");
         }

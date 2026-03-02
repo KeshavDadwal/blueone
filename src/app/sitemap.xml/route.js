@@ -1,14 +1,12 @@
-import { getApiUrl } from "@/lib/apiConfig";
-
 export async function GET() {
   const baseUrl = "https://bluone.ink";
 
   // Fetch all dynamic data
   const [authorsRes, booksRes, blogsRes, eventsRes] = await Promise.all([
-    fetch(getApiUrl("/api/public/authors")),
-    fetch(getApiUrl("/api/public/books")),
-    fetch(getApiUrl("/api/public/blogs")),
-    fetch(getApiUrl("/api/public/events")),
+    fetch("https://dashboard.bluone.ink/api/public/authors"),
+    fetch("https://dashboard.bluone.ink/api/public/books"),
+    fetch("https://dashboard.bluone.ink/api/public/blogs"),
+    fetch("https://dashboard.bluone.ink/api/public/events"),
   ]);
 
   const authors = await authorsRes.json();

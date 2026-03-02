@@ -10,7 +10,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { Helmet } from "react-helmet";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense } from 'react';
-import { getApiUrl } from "@/lib/apiConfig";
 
 function BooksContent() {
   const LANGUAGE_PRIORITY = [
@@ -143,7 +142,7 @@ function BooksContent() {
       try {
         setLoading(true);
         // Build URL with category filter if present
-        let allBooksUrl = getApiUrl("/api/public/books") + "?limit=500";
+        let allBooksUrl = "https://dashboard.bluone.ink/api/public/books?limit=500";
         if (categoryFilter.length > 0) {
           allBooksUrl += `&category=${encodeURIComponent(categoryFilter[0])}`;
         }
