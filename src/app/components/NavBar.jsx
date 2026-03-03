@@ -152,277 +152,287 @@ function NavBar() {
   return (
     <div>
       {/* Navbar */}
-      <div className="navmain w-full fixed h-[60px] z-[11111] bg-[#241b6d] flex justify-between items-center px-4 bg-no-repeat">
+      <div className="navmain w-full fixed h-[60px] z-[11111] bg-[#241b6d] px-4 bg-no-repeat">
         {/* Mobile + Tablet Header */}
-        <div className="flex items-center justify-between w-full lg:hidden h-[60px]">
-          <a href="/" className="flex items-center h-10">
-            <Image
-              src={navbarLogo}
-              alt="Logo"
-              width={40}
-              height={40}
-              className="object-contain"
-            />
-          </a>
+        <div className="grid grid-cols-12 items-center">
+        <div className="lg:col-span-2 md:hidden"></div>
 
-          <div className="flex items-center gap-2 ml-3">
-            {/* Search Input + results (mobile) */}
-            <div className="relative flex-1">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && query.trim()) {
-                    router.push(`/search?query=${encodeURIComponent(query)}`);
-                    setQuery("");
-                    setResults([]);
-                  }
-                }}
-                className="w-full h-10 px-3 rounded-full text-black text-sm focus:outline-none"
-              />
+          <div className="md:col-span-12 lg:col-span-8 lg:m-auto">
+            <div className="flex items-center justify-between w-full lg:hidden h-[60px] gap-3">
+              <a href="/" className="flex items-center h-10">
+                <Image
+                  src={navbarLogo}
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                />
+              </a>
 
-              {/* Search icon */}
-              <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600" />
-
-              {/* Mobile search results dropdown */}
-              {query && results.length > 0 && (
-                <ul className="absolute top-full left-0 w-full bg-white border rounded-md shadow-md mt-2 max-h-[300px] overflow-y-auto z-[99999]">
-                  {results.map((book) => (
-                    <li
-                      key={book.id}
-                      onClick={() => handleBookClick(book.slug)}
-                      className="p-2 cursor-pointer hover:bg-gray-100 text-black"
-                    >
-                      <p className="text-sm font-medium line-clamp-2">
-                        {book.title}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {book.author?.name || "Unknown Author"}
-                      </p>
-                    </li>
-                  ))}
-                  <li
-                    className="p-2 text-center cursor-pointer hover:underline border-t text-black"
-                    onClick={() => {
-                      router.push(`/search?query=${encodeURIComponent(query)}`);
-                      setQuery("");
-                      setResults([]);
+              <div className="flex items-center gap-2 ml-3">
+                {/* Search Input + results (mobile) */}
+                <div className="relative w-[160px] sm:w-[200px]">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && query.trim()) {
+                        router.push(`/search?query=${encodeURIComponent(query)}`);
+                        setQuery("");
+                        setResults([]);
+                      }
                     }}
-                  >
-                    See all results
+                   className="w-full h-9 px-3 pr-9 rounded-full text-black text-sm focus:outline-none"
+                  />
+
+                  {/* Search icon */}
+                  <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600" />
+
+                  {/* Mobile search results dropdown */}
+                  {query && results.length > 0 && (
+                    <ul className="absolute top-full left-0 w-full bg-white border rounded-md shadow-md mt-2 max-h-[300px] overflow-y-auto z-[99999]">
+                      {results.map((book) => (
+                        <li
+                          key={book.id}
+                          onClick={() => handleBookClick(book.slug)}
+                          className="p-2 cursor-pointer hover:bg-gray-100 text-black"
+                        >
+                          <p className="text-sm font-medium line-clamp-2">
+                            {book.title}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {book.author?.name || "Unknown Author"}
+                          </p>
+                        </li>
+                      ))}
+                      <li
+                        className="p-2 text-center cursor-pointer hover:underline border-t text-black"
+                        onClick={() => {
+                          router.push(`/search?query=${encodeURIComponent(query)}`);
+                          setQuery("");
+                          setResults([]);
+                        }}
+                      >
+                        See all results
+                      </li>
+                    </ul>
+                  )}
+
+                  {query && loading && (
+                    <div className="absolute top-full left-0 w-full bg-white p-2 text-sm text-gray-500 mt-2">
+                      Searching...
+                    </div>
+                  )}
+                </div>
+
+                {/* Hamburger */}
+                <button onClick={toggleMenu} className="text-white text-2xl">
+                  {isOpen ? <IoCloseSharp /> : <RxHamburgerMenu />}
+                </button>
+              </div>
+            </div>
+            {/* Desktop Menu */}
+            <ul className="hidden mx-auto text-center lg:flex space-x-20 navbar items-center">
+      
+            {/* Home */}
+            <li className={`hover:text-[#FFDE7C] ${isActive('/')} `}>
+              <a href="/"><i className="ifont">Home</i></a>
+            </li>
+
+            {/* About */}
+            <li className={`hover:text-[#FFDE7C] ${isActive('/about-us')} `}>
+              <a href="/about-us"><i className="ifont">About</i></a>
+            </li>
+            
+            {/* Books */}
+              <li
+                className={`relative group hover:text-[#FFDE7C] flex items-center h-[60px] ${isActive('/books')}`}
+                onMouseEnter={() => setShowSubMenu(true)}
+                onMouseLeave={() => setShowSubMenu(false)}
+              >
+                <div className="flex items-center cursor-pointer">
+                  <Link href="/category" className="flex-1">
+                    <i className="ifont">Books</i>
+                  </Link>
+
+                  <FaChevronDown
+                    className={`ml-1 mt-2 transition-transform duration-300 ${
+                      showSubMenu ? 'rotate-180' : ''
+                    }`}
+                  />
+                </div>
+
+                {showSubMenu && (
+                <ul
+                  className="absolute top-full left-0 w-64 bg-[#241b6d] text-white shadow-lg z-[999] rounded-b-md"
+                  onMouseEnter={() => setShowSubMenu(true)}
+                  onMouseLeave={() => setShowSubMenu(false)}
+                >
+                  {/* Best Seller */}
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
+                    <Link href="/books?category=bestsellers" className="flex justify-between">
+                      <span>Best Seller</span>
+                      {totalBooks['Bestsellers'] > 0 && (
+                        <span className="text-[#FFDE7C]">({totalBooks['Bestsellers']})</span>
+                      )}
+                    </Link>
+                  </li>
+
+                  {/* New Releases */}
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
+                    <Link href="/books?category=new-releases" className="flex justify-between">
+                      <span>New Releases</span>
+                      {totalBooks['New-Releases'] > 0 && (
+                        <span className="text-[#FFDE7C]">({totalBooks['New-Releases']})</span>
+                      )}
+                    </Link>
+                  </li>
+
+                  {/* Coming Soon */}
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
+                    <Link href="/books?category=coming-soon" className="flex justify-between">
+                      <span>Coming Soon</span>
+                      {totalBooks['Coming-Soon'] > 0 && (
+                        <span className="text-[#FFDE7C]">({totalBooks['Coming-Soon']})</span>
+                      )}
+                    </Link>
+                  </li>
+
+                  {/* Divider */}
+                  <li className="border-t border-[#3f3690] my-1"></li>
+
+                  {/* Categories */}
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
+                    <Link href="/books?category=Non-Fiction" className="flex justify-between">
+                      <span>Non-Fiction</span>
+                      {totalBooks['Non-Fiction'] > 0 && (
+                        <span className="text-[#FFDE7C]">({totalBooks['Non-Fiction']})</span>
+                      )}
+                    </Link>
+                  </li>
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
+                    <Link href="/books?category=Fiction" className="flex justify-between">
+                      <span>Fiction</span>
+                      {totalBooks['Fiction'] > 0 && (
+                        <span className="text-[#FFDE7C]">({totalBooks['Fiction']})</span>
+                      )}
+                    </Link>
+                  </li>
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
+                    <Link href="/books?category=Children" className="flex justify-between">
+                      <span>Children</span>
+                      {totalBooks['Children'] > 0 && (
+                        <span className="text-[#FFDE7C]">({totalBooks['Children']})</span>
+                      )}
+                    </Link>
+                  </li>
+                  {/* Divider */}
+                  <li className="border-t border-[#3f3690] my-1"></li>
+
+                  {/* ✅ Catalogue download option */}
+                  <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm whitespace-nowrap">
+                    <a
+                      href="/catalogs/ink_catalog_cover_2026.pdf"
+                      download
+                      className="block w-full"
+                    >
+                      Catalogue (PDF)
+                    </a>
+                    
                   </li>
                 </ul>
               )}
 
-              {query && loading && (
-                <div className="absolute top-full left-0 w-full bg-white p-2 text-sm text-gray-500 mt-2">
-                  Searching...
-                </div>
-              )}
-            </div>
-
-            {/* Hamburger */}
-            <button onClick={toggleMenu} className="text-white text-2xl">
-              {isOpen ? <IoCloseSharp /> : <RxHamburgerMenu />}
-            </button>
-          </div>
-        </div>
-
-        {/* Desktop Menu */}
-        <ul className="hidden mx-auto text-center lg:flex space-x-20 navbar items-center">
-  
-        {/* Home */}
-        <li className={`hover:text-[#FFDE7C] ${isActive('/')} `}>
-          <a href="/"><i className="ifont">Home</i></a>
-        </li>
-
-        {/* About */}
-        <li className={`hover:text-[#FFDE7C] ${isActive('/about-us')} `}>
-          <a href="/about-us"><i className="ifont">About</i></a>
-        </li>
-        
-        {/* Books */}
-          <li
-            className={`relative group hover:text-[#FFDE7C] flex items-center h-[60px] ${isActive('/books')}`}
-            onMouseEnter={() => setShowSubMenu(true)}
-            onMouseLeave={() => setShowSubMenu(false)}
-          >
-            <div className="flex items-center cursor-pointer">
-              <Link href="/category" className="flex-1">
-                <i className="ifont">Books</i>
-              </Link>
-
-              <FaChevronDown
-                className={`ml-1 mt-2 transition-transform duration-300 ${
-                  showSubMenu ? 'rotate-180' : ''
-                }`}
-              />
-            </div>
-
-            {showSubMenu && (
-            <ul
-              className="absolute top-full left-0 w-64 bg-[#241b6d] text-white shadow-lg z-[999] rounded-b-md"
-              onMouseEnter={() => setShowSubMenu(true)}
-              onMouseLeave={() => setShowSubMenu(false)}
-            >
-              {/* Best Seller */}
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
-                <Link href="/books?category=bestsellers" className="flex justify-between">
-                  <span>Best Seller</span>
-                  {totalBooks['Bestsellers'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Bestsellers']})</span>
-                  )}
-                </Link>
+              </li>
+              {/* Logo */}
+              <li>
+                <a href="/"><Image src={navbarLogo} alt="Logo" height={40} className="hidden lg:block" /></a>
               </li>
 
-              {/* New Releases */}
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
-                <Link href="/books?category=new-releases" className="flex justify-between">
-                  <span>New Releases</span>
-                  {totalBooks['New-Releases'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['New-Releases']})</span>
-                  )}
-                </Link>
+              {/* Authors */}
+              <li className={`hover:text-[#FFDE7C] ${isActive('/authors')} `}>
+                <a href="/authors"><i className="ifont">Authors</i></a>
               </li>
 
-              {/* Coming Soon */}
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
-                <Link href="/books?category=coming-soon" className="flex justify-between">
-                  <span>Coming Soon</span>
-                  {totalBooks['Coming-Soon'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Coming-Soon']})</span>
-                  )}
-                </Link>
+              {/* Submissions */}
+              <li className={`hover:text-[#FFDE7C] ${isActive('/submissions')} `}>
+                <a href="/submissions"><i className="ifont">Submissions</i ></a>
               </li>
 
-              {/* Divider */}
-              <li className="border-t border-[#3f3690] my-1"></li>
-
-              {/* Categories */}
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
-                <Link href="/books?category=Non-Fiction" className="flex justify-between">
-                  <span>Non-Fiction</span>
-                  {totalBooks['Non-Fiction'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Non-Fiction']})</span>
-                  )}
-                </Link>
-              </li>
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
-                <Link href="/books?category=Fiction" className="flex justify-between">
-                  <span>Fiction</span>
-                  {totalBooks['Fiction'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Fiction']})</span>
-                  )}
-                </Link>
-              </li>
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
-                <Link href="/books?category=Children" className="flex justify-between">
-                  <span>Children</span>
-                  {totalBooks['Children'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Children']})</span>
-                  )}
-                </Link>
-              </li>
-              {/* Divider */}
-              <li className="border-t border-[#3f3690] my-1"></li>
-
-              {/* ✅ Catalogue download option */}
-              <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm whitespace-nowrap">
-                <a
-                  href="/catalogs/ink_catalog_cover_2026.pdf"
-                  download
-                  className="block w-full"
-                >
-                  Catalogue (PDF)
-                </a>
-                
+              {/* Contact */}
+              <li className={`hover:text-[#FFDE7C] ${isActive('/contact')} `}>
+                <a href="/contact"><i className="ifont">Contact Us</i ></a>
               </li>
             </ul>
-          )}
+          </div>
 
-          </li>
-          {/* Logo */}
-          <li>
-            <a href="/"><Image src={navbarLogo} alt="Logo" height={40} className="hidden lg:block" /></a>
-          </li>
-
-          {/* Authors */}
-          <li className={`hover:text-[#FFDE7C] ${isActive('/authors')} `}>
-            <a href="/authors"><i className="ifont">Authors</i></a>
-          </li>
-
-          {/* Submissions */}
-          <li className={`hover:text-[#FFDE7C] ${isActive('/submissions')} `}>
-            <a href="/submissions"><i className="ifont">Submissions</i ></a>
-          </li>
-
-          {/* Contact */}
-          <li className={`hover:text-[#FFDE7C] ${isActive('/contact')} `}>
-            <a href="/contact"><i className="ifont">Contact Us</i ></a>
-          </li>
-        </ul>
-        <li className="relative hidden lg:flex items-center">
-            <div className="relative flex-1 min-w-0">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && query.trim()) {
-                    router.push(`/search?query=${encodeURIComponent(query)}`);
-                    setQuery("");
-                    setResults([]);
-                  }
-                }}
-                className="w-[220px] px-3 py-1.5 rounded-full text-black text-sm focus:outline-none"
-              />
-
-              {/* Search icon */}
-              <button
-                onClick={() => {
-                  if (query.trim()) {
-                    router.push(`/search?query=${encodeURIComponent(query)}`);
-                    setQuery("");
-                    setResults([]);
-                  }
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600"
-              >
-                <FiSearch size={16} />
-              </button>
-
-              {/* Results dropdown */}
-              {query && results.length > 0 && (
-                <ul className="absolute top-full left-0 w-full bg-white border rounded-md shadow-md mt-2 max-h-[300px] overflow-y-auto z-[99999]">
-                  {results.map((book) => (
-                    <li
-                      key={book.id}
-                      onClick={() => handleBookClick(book.slug)}
-                      className="p-2 cursor-pointer hover:bg-gray-100 text-black"
-                    >
-                      <p className="text-sm font-medium">{book.title}</p>
-                      <p className="text-xs text-gray-500">
-                        {book.author?.name || "Unknown Author"}
-                      </p>
-                    </li>
-                  ))}
-                  <li
-                    className="p-2 text-center cursor-pointer hover:underline border-t text-black"
-                    onClick={() => {
+          <div className="md:col-span-2">
+            <div className="hidden lg:flex items-center">
+              <div className="relative w-[220px]">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && query.trim()) {
                       router.push(`/search?query=${encodeURIComponent(query)}`);
                       setQuery("");
                       setResults([]);
-                    }}
-                  >
-                    See all results
-                  </li>
-                </ul>
-              )}
+                    }
+                  }}
+                  className="w-full px-3 pr-10 py-1.5 rounded-full text-black text-sm focus:outline-none border border-transparent focus:border-gray-300"
+                />
+
+                {/* SEARCH ICON */}
+                <button
+                  onClick={() => {
+                    if (query.trim()) {
+                      router.push(`/search?query=${encodeURIComponent(query)}`);
+                      setQuery("");
+                      setResults([]);
+                    }
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+                >
+                  <FiSearch size={16} />
+                </button>
+
+                {/* RESULTS DROPDOWN */}
+                {query && results.length > 0 && (
+                  <ul className="absolute top-full left-0 w-full bg-white border rounded-lg shadow-lg mt-2 max-h-[300px] overflow-y-auto z-[99999]">
+                    {results.map((book) => (
+                      <li
+                        key={book.id}
+                        onClick={() => handleBookClick(book.slug)}
+                        className="p-3 cursor-pointer hover:bg-gray-100 text-black transition-colors"
+                      >
+                        <p className="text-sm font-medium">{book.title}</p>
+                        <p className="text-xs text-gray-500">
+                          {book.author?.name || "Unknown Author"}
+                        </p>
+                      </li>
+                    ))}
+
+                    <li
+                      className="p-3 text-center cursor-pointer hover:underline border-t text-black"
+                      onClick={() => {
+                        router.push(`/search?query=${encodeURIComponent(query)}`);
+                        setQuery("");
+                        setResults([]);
+                      }}
+                    >
+                      See all results
+                    </li>
+                  </ul>
+                )}
+
+              </div>
             </div>
-          </li>
+          </div>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
@@ -522,78 +532,6 @@ function NavBar() {
           <a href="/contact" className="py-2 border-b">Contact Us</a>
         </div>
       )}
-
-      {/* Search Bar */}
-      <div
-        ref={searchRef}
-        className={`fixed top-[60px] bg-white w-full px-4 transition-all duration-300 overflow-visible z-[999] ${
-          showSearchBar ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="relative max-w-2xl mx-auto p-2">
-          <input
-            type="text"
-            placeholder="Search by Title, Author or ISBN"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && query.trim()) {
-                router.push(`/search?query=${encodeURIComponent(query)}`);
-                setShowSearchBar(false);
-              }
-            }}
-            className="w-full px-3 py-2 rounded-full border text-black focus:outline-none pr-8"
-          />
-          <button
-            onClick={() => {
-              if (query.trim()) {
-                router.push(`/search?query=${encodeURIComponent(query)}`);
-                setQuery("");
-                setResults([]);
-                setShowSearchBar(false);
-              }
-            }}
-            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-600"
-          >
-            <FiSearch size={18} />
-          </button>
-
-          {/* Results */}
-          {query && results.length > 0 && (
-            <ul className="absolute top-full p-3 left-0 w-full bg-white border rounded-md shadow-md max-h-[70vh] overflow-y-auto z-[99999]">
-              {results.map((book) => (
-                <li
-                  key={book.id}
-                  onClick={() => handleBookClick(book.slug)}
-                  className="flex gap-2 p-2 cursor-pointer hover:bg-gray-100"
-                >
-                  <div>
-                    <p className="text-sm font-medium">{book.title}</p>
-                    <p className="text-xs text-gray-600">{book.author?.name || "Unknown Author"}</p>
-                    <p className="text-xs text-gray-400">ISBN: {book.isbn13 || "N/A"}</p>
-                  </div>
-                </li>
-              ))}
-              <li
-                className="p-2 text-center cursor-pointer hover:underline border-t"
-                onClick={() => {
-                  router.push(`/search?query=${encodeURIComponent(query)}`);
-                  setQuery("");
-                  setResults([]);
-                  setShowSearchBar(false);
-                }}
-              >
-                See all results
-              </li>
-            </ul>
-          )}
-          {query && loading && (
-            <div className="absolute top-full left-0 w-full bg-white p-2 text-sm text-gray-500 mt-1">
-              Searching...
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   );
 }
