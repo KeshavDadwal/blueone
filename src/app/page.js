@@ -25,21 +25,6 @@ export default function Home() {
   const [heroImages, setHeroImages] = useState([]);
 
   useEffect(() => {
-    async function loadBooks() {
-      try {
-        const booksData = await fetchAllBooks();
-        const processedBooks = booksData.map(book => processBookData(book));
-        setBooks(processedBooks);
-      } catch (error) {
-        console.error("Error loading books:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadBooks();
-  }, []);
-
-  useEffect(() => {
     async function loadHeroSections() {
       try {
         const heroSections = await fetchHeroSections();
@@ -48,120 +33,44 @@ export default function Home() {
       } catch (error) {
         console.error("Error loading hero sections:", error);
         setHeroImages([]);
+      }finally{
+        setLoading(false);
       }
     }
     loadHeroSections();
   }, []);
 
-  function getUniqueTitlesCount(books) {
-    const uniqueTitles = new Set();
-    books.forEach((book) => {
-      // Normalize the title by removing (PAPERBACK) or (HARDCOVER) from the end
-      const normalizedTitle = book.title
-        .replace(/\s\((PAPERBACK|Hardback)\)$/i, "")
-        .trim();
-      uniqueTitles.add(normalizedTitle);
-    });
-    return uniqueTitles.size;
-  }
-
-  function getUniqueTitlesAndBooks(books) {
-    const uniqueBooks = {};
-
-    books.forEach((book) => {
-      // Normalize the title by removing (PAPERBACK) or (HARDCOVER)
-      const normalizedTitle = book.title
-        .replace(/\s\((PAPERBACK|Hardback)\)$/i, "")
-        .trim();
-
-      if (!uniqueBooks[normalizedTitle]) {
-        uniqueBooks[normalizedTitle] = book;
-      } else {
-        // If already present, replace it with the HARDCOVER version if current is HARDCOVER
-        if (/\(Hardback\)$/i.test(book.title)) {
-          uniqueBooks[normalizedTitle] = book;
-        }
-      }
-    });
-
-    return Object.values(uniqueBooks); // Return array of unique books
-  }
-
-  // Helper function to group books by publishYear
-  const booksByYear = books.reduce((acc, book) => {
-    if (!acc[book.publish_year]) {
-      acc[book.publish_year] = [];
-    }
-    acc[book.publish_year].push(book);
-    return acc;
-  }, {});
-
-  // Helper function to get the number of distinct authors for each year
-  const getAuthorsCount = (booksArray) => {
-    const authors = new Set();
-
-    booksArray.forEach((book) => {
-      if (Array.isArray(book.authors)) {
-        book.authors.forEach(author => {
-          if (author && author.author_name && author.author_name.trim() !== '' && author.author_name !== 'author black') {
-            authors.add(author.author_name);
-          }
-        });
-      } else if (book.author && book.author.author_name && book.author.author_name.trim() !== '' && book.author.author_name !== 'author black') {
-        authors.add(book.author.author_name);
-      }
-    });
-
-    return authors.size;
-  };
-
-  // Helper function to get the number of distinct languages for each year
-  const getLanguagesCount = (booksArray) => {
-    const languages = new Set();
-
-    booksArray.forEach((book) => {
-      if (book.language && book.language.trim() !== "") {
-        languages.add(book.language);
-      }
-    });
-    return languages.size;
-  };
-
-  const sortedYears = Object.keys(booksByYear).sort();
-
-  // Helper function to adjust book categorization based on month
-  const adjustedBooksByYear = {};
-
-  // Categorize books correctly based on publish year and month
-  books.forEach((book) => {
-    let year = parseInt(book.publish_year, 10);
-    let month = "april"; // Default month
+  // const adjustedBooksByYear = {};
+  // // Categorize books correctly based on publish year and month
+  // books.forEach((book) => {
+  //   let year = parseInt(book.publish_year, 10);
+  //   let month = "april"; // Default month
     
-    // Handle different possible formats of publish_month
-    if (book.publish_month) {
-      if (typeof book.publish_month === 'string') {
-        month = book.publish_month.toLowerCase();
-      } else if (typeof book.publish_month === 'number') {
-        // Convert month number to name
-        const monthNames = [
-          'january', 'february', 'march', 'april', 'may', 'june',
-          'july', 'august', 'september', 'october', 'november', 'december'
-        ];
-        month = monthNames[book.publish_month - 1] || 'april';
-      }
-    }
+  //   // Handle different possible formats of publish_month
+  //   if (book.publish_month) {
+  //     if (typeof book.publish_month === 'string') {
+  //       month = book.publish_month.toLowerCase();
+  //     } else if (typeof book.publish_month === 'number') {
+  //       // Convert month number to name
+  //       const monthNames = [
+  //         'january', 'february', 'march', 'april', 'may', 'june',
+  //         'july', 'august', 'september', 'october', 'november', 'december'
+  //       ];
+  //       month = monthNames[book.publish_month - 1] || 'april';
+  //     }
+  //   }
   
-    // If January, February, or March, move it back by one year
-    if (month === "january" || month === "february" || month === "march") {
-      year -= 1;
-    }
+  //   // If January, February, or March, move it back by one year
+  //   if (month === "january" || month === "february" || month === "march") {
+  //     year -= 1;
+  //   }
   
-    if (!adjustedBooksByYear[year]) {
-      adjustedBooksByYear[year] = [];
-    }
+  //   if (!adjustedBooksByYear[year]) {
+  //     adjustedBooksByYear[year] = [];
+  //   }
   
-    adjustedBooksByYear[year].push(book);
-  });  
+  //   adjustedBooksByYear[year].push(book);
+  // });  
 
   return (
     <>
@@ -188,72 +97,8 @@ export default function Home() {
           </div>
 
           <div className="bg-[#ffffff] w-full relative z-[11]">
-            {/* <div className="w-full h-full bg-[#1084090D] pt-[60px] pb-[80px] bookpart relative z-[111]">
-              <div className="container mx-auto">
-                <section className="book_by_year ">
-                  <i>
-                    <h6 className="text-center font-semibold">
-                      In 2021, the year BluOne Ink was founded, we published{" "}
-                      {booksByYear[2021]
-                        ? getUniqueTitlesCount(booksByYear[2021])
-                        : 0}{" "}
-                      titles.
-                      <br />
-                      This year, we aim to cross 100 published titles.
-                    </h6>
-                  </i>
-
-                  {Object.keys(adjustedBooksByYear).map((year) => {
-                    const nextYear = (parseInt(year) + 1).toString();
-                    const displayYear = `${year}-${nextYear}`;
-                    const booksForYear = adjustedBooksByYear[year] || [];
-                    
-                    // Skip rendering if no books exist for this year
-                    if (booksForYear.length === 0) return null;  
-
-                    const uniqueBooksForYear = getUniqueTitlesAndBooks(booksForYear);
-                    const languagesCount = getLanguagesCount(booksForYear); 
-
-                    return (
-                      <div key={year}>
-                        <div className="flex justify-center mt-[54px]">
-                          <Image src={inksingleicon} width={30} height={30} />
-                        </div>
-                        <div className="flex flex-col mt-[26px]">
-                          <span className="text-center text-[#241B6D] spanfont">
-                            {displayYear}
-                          </span>
-                          <i className="mt-[4px]">
-                            <h6 className="text-center font-normal">
-                              {uniqueBooksForYear.length} titles, {languagesCount}{" "}
-                              {languagesCount === 1 ? "language" : "languages"},{" "}
-                              {getAuthorsCount(booksForYear)} authors
-                            </h6>
-                          </i>
-
-                          <div
-                            className={`items_main flex flex-wrap gap-2 justify-center mt-[30px] ${
-                              year === "2022" ? "max-w-3xl mx-auto" : ""
-                            }`}
-                          >
-                            {uniqueBooksForYear.map((book) => (
-                              <div className="item_card" key={book.id}>
-                                <Link href={`./books/${book.slug}`} style={{ textDecoration: "none" }}>
-                                  <img src={book.book_image} alt={book.title} className="cover_img" />
-                                </Link>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </section>
-              </div>
-            </div> */}
-
             <section className="bg-white">
-              <BookDiscovery books={books} />
+              <BookDiscovery />
             </section>
 
             {/* <AuthorSpotlightDynamic /> */}
@@ -264,8 +109,6 @@ export default function Home() {
               "vivek-ranjan-agnihotri"
               ]}
             />
-
-            {/* <Spotlight /> */}
 
             <section className="container event mt-[80px] pb-[60px]">
               <div className="flex items-center justify-center gap-2 pb-6 ">
