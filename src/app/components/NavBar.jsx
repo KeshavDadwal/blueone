@@ -133,11 +133,10 @@ function NavBar() {
               </a>
 
               <div className="flex items-center gap-2 ml-3">
-                {/* Search Input + results (mobile) */}
                 <div className="relative flex-1">
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Search by Title, Author or ISBN"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => {
@@ -200,13 +199,17 @@ function NavBar() {
             <ul className="hidden mx-auto text-center lg:flex space-x-20 navbar items-center">
       
             {/* Home */}
-            <li className={`hover:text-[#FFDE7C] ${isActive('/')} `}>
-              <a href="/"><i className="ifont">Home</i></a>
+            <li className={`hover:text-[#FFDE7C] ${isActive('/')}`}>
+              <Link href="/" className="ifont">
+                  Home
+              </Link>
             </li>
 
             {/* About */}
             <li className={`hover:text-[#FFDE7C] ${isActive('/about-us')} `}>
-              <a href="/about-us"><i className="ifont">About</i></a>
+              <Link href="/about-us" className="ifont">
+                  About
+              </Link>
             </li>
             
             {/* Books */}
@@ -216,9 +219,10 @@ function NavBar() {
                 onMouseLeave={() => setShowSubMenu(false)}
               >
                 <div className="flex items-center cursor-pointer">
-                  <Link href="/category" className="flex-1">
-                    <i className="ifont">Books</i>
+                  <Link href="/category" className="ifont">
+                    Books
                   </Link>
+                  
 
                   <FaChevronDown
                     className={`ml-1 mt-2 transition-transform duration-300 ${
@@ -315,18 +319,24 @@ function NavBar() {
               </li>
 
               {/* Authors */}
-              <li className={`hover:text-[#FFDE7C] ${isActive('/authors')} `}>
-                <a href="/authors"><i className="ifont">Authors</i></a>
+              <li className={`hover:text-[#FFDE7C] ${isActive('/authors')}`}>
+                <Link href="/authors" className="ifont">
+                  Authors
+                </Link>
               </li>
 
               {/* Submissions */}
-              <li className={`hover:text-[#FFDE7C] ${isActive('/submissions')} `}>
-                <a href="/submissions"><i className="ifont">Submissions</i ></a>
+              <li className={`hover:text-[#FFDE7C] ${isActive('/submissions')}`}>
+                <Link href="/submissions" className="ifont">
+                  Submissions
+                </Link>
               </li>
 
               {/* Contact */}
-              <li className={`hover:text-[#FFDE7C] ${isActive('/contact')} `}>
-                <a href="/contact"><i className="ifont">Contact Us</i ></a>
+              <li className={`hover:text-[#FFDE7C] ${isActive('/contact')}`}>
+                <Link href="/contact" className="ifont">
+                  Contact Us
+                </Link>
               </li>
             </ul>
           </div>
@@ -336,7 +346,7 @@ function NavBar() {
               <div className="relative w-[220px]">
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search by Title, Author or ISBN "
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
@@ -406,8 +416,12 @@ function NavBar() {
               <IoCloseSharp />
             </button>
           </div>
-          <a href="/" className="py-2 border-b">Home</a>
-          <a href="/about-us" className="py-2 border-b">About</a>
+          <Link href="/" className="py-2 border-b" onClick={() => setIsOpen(false)}>
+            Home
+          </Link>
+          <Link href="/about-us" className="py-2 border-b" onClick={() => setIsOpen(false)}>
+            About
+          </Link>
           
           <div className="py-2 border-b">
             <p className="flex items-center justify-between cursor-pointer" onClick={() => setShowSubMenu(!showSubMenu)}>
@@ -490,9 +504,15 @@ function NavBar() {
               </ul>
               )} 
           </div>
-          <a href="/authors" className="py-2 border-b">Authors</a>
-          <a href="/submissions" className="py-2 border-b">Submissions</a>
-          <a href="/contact" className="py-2 border-b">Contact Us</a>
+          <Link href="/authors" className="py-2 border-b" onClick={() => setIsOpen(false)}>
+            Authors
+          </Link>
+          <Link href="/submissions" className="py-2 border-b" onClick={() => setIsOpen(false)}>
+            Submissions
+          </Link>
+          <Link href="/contact" className="py-2 border-b" onClick={() => setIsOpen(false)}>
+            Contact Us
+          </Link>
         </div>
       )}
     </div>
