@@ -362,8 +362,8 @@ function NavBar() {
           <li className={`hover:text-[#FFDE7C] ${isActive('/contact')} `}>
             <a href="/contact"><i className="ifont">Contact Us</i ></a>
           </li>
-
-          <li className="relative hidden lg:flex items-center">
+        </ul>
+        <li className="relative hidden lg:flex items-center">
             <div className="relative flex-1 min-w-0">
               <input
                 type="text"
@@ -423,7 +423,6 @@ function NavBar() {
               )}
             </div>
           </li>
-        </ul>
       </div>
 
       {/* Mobile Drawer */}
