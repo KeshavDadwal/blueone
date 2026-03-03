@@ -65,45 +65,76 @@ function NavBar() {
     fetchCategoryCounts();
   }, []);
 
-  // Fetch all books
   useEffect(() => {
-    const fetchAllBooks = async () => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+  
+    const delayDebounce = setTimeout(async () => {
       try {
-        const res = await fetch("https://dashboard.bluone.ink/api/public/books");
-        if (res.ok) {
-          const data = await res.json();
-          setAllBooks(data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchAllBooks();
-  }, []);
-
-  // Search filter
-  useEffect(() => {
-    if (!query) return setResults([]);
-    const delayDebounce = setTimeout(() => {
-      setLoading(true);
-      try {
-        const filtered = allBooks.filter((book) => {
-          const titleMatch = book.title?.toLowerCase().includes(query.toLowerCase());
-          const authorMatch = book.author?.name?.toLowerCase().includes(query.toLowerCase());
-          const isbnMatch =
-            book.isbn13 &&
-            book.isbn13.toString().replace(/-/g, "").includes(query.replace(/-/g, ""));
-          return titleMatch || authorMatch || isbnMatch;
-        });
-        setResults(filtered.slice(0, 6));
-      } catch (err) {
-        console.error("Search filter error:", err);
+        setLoading(true);
+  
+        const res = await fetch(
+          `https://dashboard.bluone.ink/api/v1/public/books-list/search?search=${encodeURIComponent(query)}&limit=6`
+        );
+  
+        if (!res.ok) throw new Error("Search failed");
+  
+        const data = await res.json();
+  
+        // API returns { books, total, page, totalPages }
+        setResults(data.books || []);
+      } catch (error) {
+        console.error("Search API error:", error);
+        setResults([]);
       } finally {
         setLoading(false);
       }
-    }, 400);
+    }, 400); // debounce
+  
     return () => clearTimeout(delayDebounce);
-  }, [query, allBooks]);
+  }, [query]);
+
+  // Fetch all books
+  // useEffect(() => {
+  //   const fetchAllBooks = async () => {
+  //     try {
+  //       const res = await fetch("https://dashboard.bluone.ink/api/public/books");
+  //       if (res.ok) {
+  //         const data = await res.json();
+  //         setAllBooks(data);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   fetchAllBooks();
+  // }, []);
+
+  // // Search filter
+  // useEffect(() => {
+  //   if (!query) return setResults([]);
+  //   const delayDebounce = setTimeout(() => {
+  //     setLoading(true);
+  //     try {
+  //       const filtered = allBooks.filter((book) => {
+  //         const titleMatch = book.title?.toLowerCase().includes(query.toLowerCase());
+  //         const authorMatch = book.author?.name?.toLowerCase().includes(query.toLowerCase());
+  //         const isbnMatch =
+  //           book.isbn13 &&
+  //           book.isbn13.toString().replace(/-/g, "").includes(query.replace(/-/g, ""));
+  //         return titleMatch || authorMatch || isbnMatch;
+  //       });
+  //       setResults(filtered.slice(0, 6));
+  //     } catch (err) {
+  //       console.error("Search filter error:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }, 400);
+  //   return () => clearTimeout(delayDebounce);
+  // }, [query, allBooks]);
 
   const handleBookClick = (slug) => {
     setQuery("");
