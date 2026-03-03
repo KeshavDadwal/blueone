@@ -47,43 +47,6 @@ function NavBar() {
     };
   }, [showSearchBar]);
 
-  // Fetch categories and counts via internal API
-  // useEffect(() => {
-  //   const fetchCategoryCounts = async () => {
-  //     try {
-  //       const bookCounts = {};
-
-  //       // Fetch counts for all categories using category slugs
-  //       const allCategories = [
-  //         { slug: 'bestsellers', label: 'Best Seller' },
-  //         { slug: 'new-releases', label: 'New Releases' },
-  //         { slug: 'coming-soon', label: 'Coming Soon' },
-  //         { slug: 'Non-Fiction', label: 'Non-Fiction' },
-  //         { slug: 'Fiction', label: 'Fiction' },
-  //         { slug: 'Children', label: 'Children' }
-  //       ];
-
-  //       for (const category of allCategories) {
-  //         try {
-  //           const res = await fetch(`https://dashboard.bluone.ink/api/public/books?category=${encodeURIComponent(category.slug)}`);
-  //           if (res.ok) {
-  //             const data = await res.json();
-  //             bookCounts[category.label] = data.length || 0;
-  //           }
-  //         } catch (err) {
-  //           console.error(`Error fetching ${category.label}:`, err);
-  //           bookCounts[category.label] = 0;
-  //         }
-  //       }
-  //       console.log("books==========",bookCounts);
-  //       setTotalBooks(bookCounts);
-  //     } catch (error) {
-  //       console.error("Error fetching book counts:", error);
-  //     }
-  //   };
-  //   fetchCategoryCounts();
-  // }, []);
-
   useEffect(() => {
     const fetchCategoryCounts = async () => {
       try {
@@ -154,7 +117,7 @@ function NavBar() {
       {/* Navbar */}
       <div className="navmain w-full fixed h-[60px] z-[11111] bg-[#241b6d] px-4 bg-no-repeat">
         {/* Mobile + Tablet Header */}
-        <div className="grid grid-cols-12 items-center">
+        <div className="md:grid md:grid-cols-12 md:items-center">
           <div className="col-span-2"></div>
 
           <div className="md:col-span-12 lg:col-span-8 lg:m-auto">
