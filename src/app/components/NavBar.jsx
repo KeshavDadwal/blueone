@@ -47,36 +47,54 @@ function NavBar() {
     };
   }, [showSearchBar]);
 
-  // Fetch categories and counts (optimized - count only, not full data)
+  // Fetch categories and counts via internal API
+  // useEffect(() => {
+  //   const fetchCategoryCounts = async () => {
+  //     try {
+  //       const bookCounts = {};
+
+  //       // Fetch counts for all categories using category slugs
+  //       const allCategories = [
+  //         { slug: 'bestsellers', label: 'Best Seller' },
+  //         { slug: 'new-releases', label: 'New Releases' },
+  //         { slug: 'coming-soon', label: 'Coming Soon' },
+  //         { slug: 'Non-Fiction', label: 'Non-Fiction' },
+  //         { slug: 'Fiction', label: 'Fiction' },
+  //         { slug: 'Children', label: 'Children' }
+  //       ];
+
+  //       for (const category of allCategories) {
+  //         try {
+  //           const res = await fetch(`https://dashboard.bluone.ink/api/public/books?category=${encodeURIComponent(category.slug)}`);
+  //           if (res.ok) {
+  //             const data = await res.json();
+  //             bookCounts[category.label] = data.length || 0;
+  //           }
+  //         } catch (err) {
+  //           console.error(`Error fetching ${category.label}:`, err);
+  //           bookCounts[category.label] = 0;
+  //         }
+  //       }
+  //       console.log("books==========",bookCounts);
+  //       setTotalBooks(bookCounts);
+  //     } catch (error) {
+  //       console.error("Error fetching book counts:", error);
+  //     }
+  //   };
+  //   fetchCategoryCounts();
+  // }, []);
+
   useEffect(() => {
     const fetchCategoryCounts = async () => {
       try {
-        const bookCounts = {};
-
-        // Fetch counts for all categories using category slugs
-        const allCategories = [
-          { slug: 'bestsellers', label: 'Best Seller' },
-          { slug: 'new-releases', label: 'New Releases' },
-          { slug: 'coming-soon', label: 'Coming Soon' },
-          { slug: 'Non-Fiction', label: 'Non-Fiction' },
-          { slug: 'Fiction', label: 'Fiction' },
-          { slug: 'Children', label: 'Children' }
-        ];
-
-        for (const category of allCategories) {
-          try {
-            const res = await fetch(`https://dashboard.bluone.ink/api/public/books?category=${encodeURIComponent(category.slug)}`);
-            if (res.ok) {
-              const data = await res.json();
-              bookCounts[category.label] = data.length || 0;
-            }
-          } catch (err) {
-            console.error(`Error fetching ${category.label}:`, err);
-            bookCounts[category.label] = 0;
-          }
+        const res = await fetch(
+          "https://dashboard.bluone.ink/api/v1/public/books-list/count-by-category"
+        );
+        if (!res.ok) {
+          throw new Error("Failed to fetch category counts");
         }
-
-        setTotalBooks(bookCounts);
+        const data = await res.json();
+        setTotalBooks(data);
       } catch (error) {
         console.error("Error fetching book counts:", error);
       }
@@ -136,17 +154,76 @@ function NavBar() {
       {/* Navbar */}
       <div className="navmain w-full fixed h-[60px] z-[11111] bg-[#241b6d] flex justify-between items-center px-4 bg-no-repeat">
         {/* Mobile + Tablet Header */}
-        <div className="flex items-center justify-between w-full lg:hidden">
-          <a href="/">
-            <Image src={navbarLogo} alt="Logo" width={60} height={40} />
+        <div className="flex items-center justify-between w-full lg:hidden h-[60px]">
+          <a href="/" className="flex items-center h-10">
+            <Image
+              src={navbarLogo}
+              alt="Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
           </a>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setShowSearchBar(!showSearchBar)}
-              className="text-white text-xl"
-            >
-              <FiSearch />
-            </button>
+
+          <div className="flex items-center gap-2 ml-3">
+            {/* Search Input + results (mobile) */}
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && query.trim()) {
+                    router.push(`/search?query=${encodeURIComponent(query)}`);
+                    setQuery("");
+                    setResults([]);
+                  }
+                }}
+                className="w-full h-10 px-3 rounded-full text-black text-sm focus:outline-none"
+              />
+
+              {/* Search icon */}
+              <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600" />
+
+              {/* Mobile search results dropdown */}
+              {query && results.length > 0 && (
+                <ul className="absolute top-full left-0 w-full bg-white border rounded-md shadow-md mt-2 max-h-[300px] overflow-y-auto z-[99999]">
+                  {results.map((book) => (
+                    <li
+                      key={book.id}
+                      onClick={() => handleBookClick(book.slug)}
+                      className="p-2 cursor-pointer hover:bg-gray-100 text-black"
+                    >
+                      <p className="text-sm font-medium line-clamp-2">
+                        {book.title}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {book.author?.name || "Unknown Author"}
+                      </p>
+                    </li>
+                  ))}
+                  <li
+                    className="p-2 text-center cursor-pointer hover:underline border-t text-black"
+                    onClick={() => {
+                      router.push(`/search?query=${encodeURIComponent(query)}`);
+                      setQuery("");
+                      setResults([]);
+                    }}
+                  >
+                    See all results
+                  </li>
+                </ul>
+              )}
+
+              {query && loading && (
+                <div className="absolute top-full left-0 w-full bg-white p-2 text-sm text-gray-500 mt-2">
+                  Searching...
+                </div>
+              )}
+            </div>
+
+            {/* Hamburger */}
             <button onClick={toggleMenu} className="text-white text-2xl">
               {isOpen ? <IoCloseSharp /> : <RxHamburgerMenu />}
             </button>
@@ -194,8 +271,8 @@ function NavBar() {
               <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
                 <Link href="/books?category=bestsellers" className="flex justify-between">
                   <span>Best Seller</span>
-                  {totalBooks['Best Seller'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Best Seller']})</span>
+                  {totalBooks['Bestsellers'] > 0 && (
+                    <span className="text-[#FFDE7C]">({totalBooks['Bestsellers']})</span>
                   )}
                 </Link>
               </li>
@@ -204,8 +281,8 @@ function NavBar() {
               <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
                 <Link href="/books?category=new-releases" className="flex justify-between">
                   <span>New Releases</span>
-                  {totalBooks['New Releases'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['New Releases']})</span>
+                  {totalBooks['New-Releases'] > 0 && (
+                    <span className="text-[#FFDE7C]">({totalBooks['New-Releases']})</span>
                   )}
                 </Link>
               </li>
@@ -214,8 +291,8 @@ function NavBar() {
               <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
                 <Link href="/books?category=coming-soon" className="flex justify-between">
                   <span>Coming Soon</span>
-                  {totalBooks['Coming Soon'] > 0 && (
-                    <span className="text-[#FFDE7C]">({totalBooks['Coming Soon']})</span>
+                  {totalBooks['Coming-Soon'] > 0 && (
+                    <span className="text-[#FFDE7C]">({totalBooks['Coming-Soon']})</span>
                   )}
                 </Link>
               </li>
@@ -285,13 +362,68 @@ function NavBar() {
           <li className={`hover:text-[#FFDE7C] ${isActive('/contact')} `}>
             <a href="/contact"><i className="ifont">Contact Us</i ></a>
           </li>
+
+          <li className="relative hidden lg:flex items-center">
+            <div className="relative flex-1 min-w-0">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && query.trim()) {
+                    router.push(`/search?query=${encodeURIComponent(query)}`);
+                    setQuery("");
+                    setResults([]);
+                  }
+                }}
+                className="w-[220px] px-3 py-1.5 rounded-full text-black text-sm focus:outline-none"
+              />
+
+              {/* Search icon */}
+              <button
+                onClick={() => {
+                  if (query.trim()) {
+                    router.push(`/search?query=${encodeURIComponent(query)}`);
+                    setQuery("");
+                    setResults([]);
+                  }
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600"
+              >
+                <FiSearch size={16} />
+              </button>
+
+              {/* Results dropdown */}
+              {query && results.length > 0 && (
+                <ul className="absolute top-full left-0 w-full bg-white border rounded-md shadow-md mt-2 max-h-[300px] overflow-y-auto z-[99999]">
+                  {results.map((book) => (
+                    <li
+                      key={book.id}
+                      onClick={() => handleBookClick(book.slug)}
+                      className="p-2 cursor-pointer hover:bg-gray-100 text-black"
+                    >
+                      <p className="text-sm font-medium">{book.title}</p>
+                      <p className="text-xs text-gray-500">
+                        {book.author?.name || "Unknown Author"}
+                      </p>
+                    </li>
+                  ))}
+                  <li
+                    className="p-2 text-center cursor-pointer hover:underline border-t text-black"
+                    onClick={() => {
+                      router.push(`/search?query=${encodeURIComponent(query)}`);
+                      setQuery("");
+                      setResults([]);
+                    }}
+                  >
+                    See all results
+                  </li>
+                </ul>
+              )}
+            </div>
+          </li>
         </ul>
-        <button
-          onClick={() => setShowSearchBar(!showSearchBar)}
-          className="hidden lg:flex text-white focus:outline-none absolute right-60"
-        >
-          <FiSearch size={20} />
-        </button>
       </div>
 
       {/* Mobile Drawer */}
@@ -315,8 +447,8 @@ function NavBar() {
                 <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
                   <Link href="/books?category=bestsellers" className="flex justify-between">
                     <span>Best Seller</span>
-                    {totalBooks['Best Seller'] > 0 && (
-                      <span className="text-[#FFDE7C]">({totalBooks['Best Seller']})</span>
+                    {totalBooks['Bestsellers'] > 0 && (
+                      <span className="text-[#FFDE7C]">({totalBooks['Bestsellers']})</span>
                     )}
                   </Link>
                 </li>
@@ -325,8 +457,8 @@ function NavBar() {
                 <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
                   <Link href="/books?category=new-releases" className="flex justify-between">
                     <span>New Releases</span>
-                    {totalBooks['New Releases'] > 0 && (
-                      <span className="text-[#FFDE7C]">({totalBooks['New Releases']})</span>
+                    {totalBooks['New-Releases'] > 0 && (
+                      <span className="text-[#FFDE7C]">({totalBooks['New-Releases']})</span>
                     )}
                   </Link>
                 </li>
@@ -335,8 +467,8 @@ function NavBar() {
                 <li className="text-sm hover:bg-[#372f87] hover:text-[#FFDE7C] px-4 py-2 text-left font-ibm cursor-pointer whitespace-nowrap">
                   <Link href="/books?category=coming-soon" className="flex justify-between">
                     <span>Coming Soon</span>
-                    {totalBooks['Coming Soon'] > 0 && (
-                      <span className="text-[#FFDE7C]">({totalBooks['Coming Soon']})</span>
+                    {totalBooks['Coming-Soon'] > 0 && (
+                      <span className="text-[#FFDE7C]">({totalBooks['Coming-Soon']})</span>
                     )}
                   </Link>
                 </li>
