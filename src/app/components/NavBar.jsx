@@ -155,10 +155,10 @@ function NavBar() {
       <div className="navmain w-full fixed h-[60px] z-[11111] bg-[#241b6d] px-4 bg-no-repeat">
         {/* Mobile + Tablet Header */}
         <div className="grid grid-cols-12 items-center">
-        <div className="lg:col-span-2 md:hidden"></div>
+          <div className="col-span-2"></div>
 
           <div className="md:col-span-12 lg:col-span-8 lg:m-auto">
-            <div className="flex items-center justify-between w-full lg:hidden h-[60px] gap-3">
+            <div className="flex items-center justify-between w-full lg:hidden h-[60px]">
               <a href="/" className="flex items-center h-10">
                 <Image
                   src={navbarLogo}
@@ -171,7 +171,7 @@ function NavBar() {
 
               <div className="flex items-center gap-2 ml-3">
                 {/* Search Input + results (mobile) */}
-                <div className="relative w-[160px] sm:w-[200px]">
+                <div className="relative flex-1">
                   <input
                     type="text"
                     placeholder="Search..."
@@ -184,7 +184,7 @@ function NavBar() {
                         setResults([]);
                       }
                     }}
-                   className="w-full h-9 px-3 pr-9 rounded-full text-black text-sm focus:outline-none"
+                    className="w-full h-10 px-3 rounded-full text-black text-sm focus:outline-none"
                   />
 
                   {/* Search icon */}
