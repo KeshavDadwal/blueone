@@ -20,7 +20,6 @@ import Spotlight from "./components/Spotlight";
 import AuthorSpotlightDynamic from "./components/AuthorSpotlightDynamic";
 
 export default function Home() {
-  const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [heroImages, setHeroImages] = useState([]);
 
@@ -39,39 +38,6 @@ export default function Home() {
     }
     loadHeroSections();
   }, []);
-
-  // const adjustedBooksByYear = {};
-  // // Categorize books correctly based on publish year and month
-  // books.forEach((book) => {
-  //   let year = parseInt(book.publish_year, 10);
-  //   let month = "april"; // Default month
-    
-  //   // Handle different possible formats of publish_month
-  //   if (book.publish_month) {
-  //     if (typeof book.publish_month === 'string') {
-  //       month = book.publish_month.toLowerCase();
-  //     } else if (typeof book.publish_month === 'number') {
-  //       // Convert month number to name
-  //       const monthNames = [
-  //         'january', 'february', 'march', 'april', 'may', 'june',
-  //         'july', 'august', 'september', 'october', 'november', 'december'
-  //       ];
-  //       month = monthNames[book.publish_month - 1] || 'april';
-  //     }
-  //   }
-  
-  //   // If January, February, or March, move it back by one year
-  //   if (month === "january" || month === "february" || month === "march") {
-  //     year -= 1;
-  //   }
-  
-  //   if (!adjustedBooksByYear[year]) {
-  //     adjustedBooksByYear[year] = [];
-  //   }
-  
-  //   adjustedBooksByYear[year].push(book);
-  // });  
-
   return (
     <>
       {loading ? (
@@ -103,20 +69,21 @@ export default function Home() {
 
             {/* <AuthorSpotlightDynamic /> */}
             <AuthorSpotlightDynamic
-              authorSlugs={[
-              "ami-ganatra",
-              "anand-ranganathan",
-              "vivek-ranjan-agnihotri"
-              ]}
+              // authorSlugs={[
+              // "ami-ganatra",
+              // "anand-ranganathan",
+              // "vivek-ranjan-agnihotri"
+              // ]}
             />
 
             <section className="container event mt-[80px] pb-[60px]">
               <div className="flex items-center justify-center gap-2 pb-6 ">
                 <Image
                   src={inkdouble1}
+                  alt="Decorative divider icon"
                   width={55}
                   height={55}
-                  className=""
+                  className="h-auto w-auto"
                 ></Image>
                 <i>
                   <h3 className="text-center text-lg lg:text-3xl font-semibold">
@@ -125,9 +92,10 @@ export default function Home() {
                 </i>
                 <Image
                   src={inkdouble2}
+                  alt="Decorative divider icon"
                   width={55}
                   height={55}
-                  className=""
+                  className="h-auto w-auto"
                 ></Image>
               </div>
 
@@ -144,8 +112,7 @@ export default function Home() {
                         alt="jlf"
                         width={500}
                         height={500}
-                        layout="intrinsic"
-                        className=""
+                        className="h-auto w-auto"
                       />
                     </Link>
                   </div>
@@ -158,7 +125,7 @@ export default function Home() {
                         alt="plf"
                         width={600}
                         height={600}
-                        className=""
+                       className="h-auto w-auto"
                       />
                     </Link>
                   </div>
@@ -174,8 +141,7 @@ export default function Home() {
                         alt="the jaipur"
                         width={650}
                         height={650}
-                        layout="intrinsic"
-                        className=""
+                        className="h-auto w-auto"
                       />
                     </Link>
                   </div>
