@@ -12,54 +12,43 @@ import {
   FaYoutube,
   FaGlobe,
 } from "react-icons/fa";
-import { fetchAuthorBySlug, processAuthorData } from "@/app/API/authorsApi";
+import { fetchAuthorsBySlugs, processAuthorData } from "@/app/API/authorsApi";
 import CurveTop from "@/app/assests/image/aboutauthorbg.png";
 import inkdouble1 from "@/app/assests/image/inkdouble1.svg";
 import inkdouble2 from "@/app/assests/image/inkdouble2.svg";
-
-export default function AuthorSpotlightDynamic({ authorSlugs = [] }) {
+const AUTHOR_SLUGS = [
+  "ami-ganatra",
+  "anand-ranganathan",
+  "vivek-ranjan-agnihotri"
+];
+export default function AuthorSpotlightDynamic() {
+  const authorSlugs = AUTHOR_SLUGS;
   const [authors, setAuthors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
 
-  // 🔹 Load ONLY selected authors
   useEffect(() => {
     async function loadAuthors() {
       try {
-        if (!authorSlugs || authorSlugs.length === 0) {
+        if (!authorSlugs.length) {
           setAuthors([]);
           return;
         }
-
-        const authorsData = await Promise.all(
-          authorSlugs.map(async (slug) => {
-            try {
-              const author = await fetchAuthorBySlug(slug);
-              return author;
-            } catch (err) {
-              console.error(`Failed to load author: ${slug}`, err);
-              return null;
-            }
-          })
-        );
-
-        const processed = authorsData
-          .filter(Boolean)
-          .map(processAuthorData);
-
-        setAuthors(processed);
+        const authorsData = await fetchAuthorsBySlugs(authorSlugs);
+        setAuthors(authorsData);
         setCurrentIndex(0);
+
       } catch (error) {
-        console.error("Error loading selected authors:", error);
+        console.error("Error loading authors:", error);
       } finally {
         setLoading(false);
       }
     }
 
     loadAuthors();
-  }, [authorSlugs]);
+  }, []);
 
   const nextAuthor = () => {
     setFadeOut(true);
@@ -160,9 +149,11 @@ export default function AuthorSpotlightDynamic({ authorSlugs = [] }) {
         {/* Author Image */}
         <div className="flex justify-center mb-2">
           <div className="z-[10] border-[#FF8100] border-4 rounded-full">
-            <img
+            <Image
               src={currentAuthor.imageUrl}
               alt={currentAuthor.name}
+              width={150}
+              height={150}
               className="rounded-full w-[100px] h-[100px] lg:w-[150px] lg:h-[150px] object-cover"
             />
           </div>
