@@ -1,6 +1,7 @@
 // API functions for fetching authors data
 
 const BASE_URL = "https://dashboard.bluone.ink/api/public/authors";
+const BASE_URL1 = "https://dashboard.bluone.ink/api/v1/public/authors";
 
 /**
  * Fetch all authors
@@ -58,6 +59,24 @@ export async function fetchAuthorBySlug(slug) {
   } catch (error) {
     console.error("Error fetching author:", error);
     return null;
+  }
+}
+
+export async function fetchAuthorsBySlugs(slugs) {
+  try {
+    const slugString = Array.isArray(slugs) ? slugs.join(",") : slugs;
+
+    const response = await fetch(`${BASE_URL1}?slugs=${slugString}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch authors: ${response.statusText}`);
+    }
+
+    return await response.json();
+
+  } catch (error) {
+    console.error("Error fetching authors:", error);
+    return [];
   }
 }
 
