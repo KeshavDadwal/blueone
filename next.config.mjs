@@ -18,6 +18,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "bluone-ink.s3.amazonaws.com",
+      },
+      {
+        protocol: "https",
         hostname: "dashboard.bluone.ink",
       },
     ],
