@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -8,64 +8,64 @@ import Header from "./components/Header";
 import Script from "next/script";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { getAllEvents } from "@/app/API/allEventList";
+// import { getAllEvents } from "@/app/API/allEventList";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+// const geistSans = localFont({
+//   src: "./fonts/GeistVF.woff",
+//   variable: "--font-geist-sans",
+//   weight: "100 900",
+// });
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// });
 
 export default function RootLayout({ children }) {
-  const [showPopup, setShowPopup] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [eventData, setEventData] = useState(null);
-  const [events, setEvents] = useState([]);
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
+  // const [eventData, setEventData] = useState(null);
+  // const [events, setEvents] = useState([]);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const events = await getAllEvents();
-        if (events && events.length > 0) {
-          const sortedEvents = [...events].sort(
-            (a, b) => new Date(b.eventdate) - new Date(a.eventdate)
-          );
-          setEvents(sortedEvents);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const events = await getAllEvents();
+  //       if (events && events.length > 0) {
+  //         const sortedEvents = [...events].sort(
+  //           (a, b) => new Date(b.eventdate) - new Date(a.eventdate)
+  //         );
+  //         setEvents(sortedEvents);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching events:", error);
+  //     }
+  //   };
 
-    fetchEvents();
+  //   fetchEvents();
 
-    // Time in milliseconds (2 minutes = 120000ms)
-    const popupReappearTime = 2 * 60 * 1000;
+  //   // Time in milliseconds (2 minutes = 120000ms)
+  //   const popupReappearTime = 2 * 60 * 1000;
 
-    const closedTimestamp = localStorage.getItem("popupClosedTime");
-    const now = new Date().getTime();
+  //   const closedTimestamp = localStorage.getItem("popupClosedTime");
+  //   const now = new Date().getTime();
 
-    if (!closedTimestamp || now - closedTimestamp > popupReappearTime) {
-      // Show popup after 3 seconds delay
-      const timer = setTimeout(() => setShowPopup(true), 3000);
+  //   if (!closedTimestamp || now - closedTimestamp > popupReappearTime) {
+  //     // Show popup after 3 seconds delay
+  //     const timer = setTimeout(() => setShowPopup(true), 3000);
 
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, []);
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    localStorage.setItem("popupClosedTime", new Date().getTime()); // Save current time
-  };
+  // const handleClosePopup = () => {
+  //   setShowPopup(false);
+  //   localStorage.setItem("popupClosedTime", new Date().getTime()); // Save current time
+  // };
 
-  const handleExpandPopup = () => {
-    setIsExpanded(true);
-  };
+  // const handleExpandPopup = () => {
+  //   setIsExpanded(true);
+  // };
 
   return (
     <html lang="en">
