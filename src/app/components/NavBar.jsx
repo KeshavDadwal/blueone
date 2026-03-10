@@ -14,25 +14,20 @@ function NavBar() {
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [totalBooks, setTotalBooks] = useState({});
   const [showSearchBar, setShowSearchBar] = useState(false);
-
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [allBooks, setAllBooks] = useState([]);
 
   const searchRef = useRef(null);
   const pathname = usePathname();
   const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
-  // const isActive = (path) => pathname === path ? 'text-[#FFDE7C]' : 'text-white';
-
   const isActive = (path) => {
   if (path === "/") return pathname === "/" ? "text-[#FFDE7C]" : "text-white";
   return pathname.startsWith(path) ? "text-[#FFDE7C]" : "text-white";
 };
 
-  // Close search popup on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -59,11 +54,21 @@ function NavBar() {
         const data = await res.json();
         setTotalBooks(data);
       } catch (error) {
-        console.error("Error fetching book counts:", error);
       }
     };
     fetchCategoryCounts();
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -71,71 +76,33 @@ function NavBar() {
       return;
     }
   
+    const controller = new AbortController();
     const delayDebounce = setTimeout(async () => {
       try {
         setLoading(true);
-  
         const res = await fetch(
-          `https://dashboard.bluone.ink/api/v1/public/books-list/search?search=${encodeURIComponent(query)}&limit=6`
+          `https://dashboard.bluone.ink/api/v1/public/books-list/search?search=${encodeURIComponent(query)}&limit=6`,
+          { signal: controller.signal }
         );
   
         if (!res.ok) throw new Error("Search failed");
   
         const data = await res.json();
-  
-        // API returns { books, total, page, totalPages }
         setResults(data.books || []);
       } catch (error) {
-        console.error("Search API error:", error);
-        setResults([]);
+        if (error.name !== "AbortError") {
+          setResults([]);
+        }
       } finally {
         setLoading(false);
       }
-    }, 400); // debounce
+    }, 400);
   
-    return () => clearTimeout(delayDebounce);
+    return () => {
+      controller.abort();
+      clearTimeout(delayDebounce);
+    };
   }, [query]);
-
-  // Fetch all books
-  // useEffect(() => {
-  //   const fetchAllBooks = async () => {
-  //     try {
-  //       const res = await fetch("https://dashboard.bluone.ink/api/public/books");
-  //       if (res.ok) {
-  //         const data = await res.json();
-  //         setAllBooks(data);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  //   fetchAllBooks();
-  // }, []);
-
-  // // Search filter
-  // useEffect(() => {
-  //   if (!query) return setResults([]);
-  //   const delayDebounce = setTimeout(() => {
-  //     setLoading(true);
-  //     try {
-  //       const filtered = allBooks.filter((book) => {
-  //         const titleMatch = book.title?.toLowerCase().includes(query.toLowerCase());
-  //         const authorMatch = book.author?.name?.toLowerCase().includes(query.toLowerCase());
-  //         const isbnMatch =
-  //           book.isbn13 &&
-  //           book.isbn13.toString().replace(/-/g, "").includes(query.replace(/-/g, ""));
-  //         return titleMatch || authorMatch || isbnMatch;
-  //       });
-  //       setResults(filtered.slice(0, 6));
-  //     } catch (err) {
-  //       console.error("Search filter error:", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }, 400);
-  //   return () => clearTimeout(delayDebounce);
-  // }, [query, allBooks]);
-
   const handleBookClick = (slug) => {
     setQuery("");
     setResults([]);
@@ -153,7 +120,7 @@ function NavBar() {
 
           <div className="md:col-span-12 lg:col-span-8 lg:m-auto">
             <div className="flex items-center justify-between w-full lg:hidden h-[60px]">
-              <a href="/" className="flex items-center h-10">
+              <Link href="/" className="flex items-center h-10">
                 <Image
                   src={navbarLogo}
                   alt="Logo"
@@ -161,7 +128,7 @@ function NavBar() {
                   height={40}
                   className="object-contain"
                 />
-              </a>
+              </Link>
 
               <div className="flex items-center gap-2 ml-3">
                 <div className="relative flex-1">
@@ -196,7 +163,10 @@ function NavBar() {
                             {book.title}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {book.author?.name || "Unknown Author"}
+                            {book.author?.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {book.isbn13}
                           </p>
                         </li>
                       ))}
@@ -326,7 +296,6 @@ function NavBar() {
                       )}
                     </Link>
                   </li>
-                  {/* Divider */}
                   <li className="border-t border-[#3f3690] my-1"></li>
 
                   {/* ✅ Catalogue download option */}
@@ -346,7 +315,9 @@ function NavBar() {
               </li>
               {/* Logo */}
               <li>
-                <a href="/"><Image src={navbarLogo} alt="Logo" height={40} className="hidden lg:block" /></a>
+              <Link href="/">
+                <Image src={navbarLogo} alt="Logo" height={40} className="hidden lg:block"/>
+              </Link>
               </li>
 
               {/* Authors */}
@@ -415,8 +386,11 @@ function NavBar() {
                       >
                         <p className="text-sm font-medium">{book.title}</p>
                         <p className="text-xs text-gray-500">
-                          {book.author?.name || "Unknown Author"}
+                          {book.author?.name}
                         </p>
+                        <p className="text-xs text-gray-500">
+                            {book.isbn13}
+                          </p>
                       </li>
                     ))}
 
