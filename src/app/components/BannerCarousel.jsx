@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import Link from 'next/link';
-
+import Image from "next/image";
 export default function BannerCarousel({ images = [] }) {
   // Normalize images to always be objects with image and link properties
   const normalizedImages = images.map(img => {
@@ -64,18 +64,26 @@ export default function BannerCarousel({ images = [] }) {
         >
           {slides.map((slide, i) => {
             const slideKey = `${slide.image}-${i}`;
+
             const imageElement = (
-              <img 
-                src={slide.image} 
-                alt={slide.title || `Banner ${i + 1}`}
-                style={{ cursor: slide.link ? 'pointer' : 'default' }}
-              />
+              <div className="relative w-full h-[450px] lg:h-[550px]">
+               <Image
+                  src={slide.image}
+                  alt={`Banner ${i + 1}`}
+                  fill
+                  priority={i === 0}
+                  quality={70}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1240px) 100vw, 1240px"
+                  className="object-cover"
+                />
+              </div>
             );
 
             if (slide.link) {
-              // Check if it's an external link
-              const isExternal = slide.link.startsWith('http://') || slide.link.startsWith('https://');
-              
+              const isExternal =
+                slide.link.startsWith("http://") ||
+                slide.link.startsWith("https://");
+
               if (isExternal) {
                 return (
                   <a
@@ -83,22 +91,18 @@ export default function BannerCarousel({ images = [] }) {
                     href={slide.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="slide-wrapper"
+                    className="slide-wrapper block"
                   >
                     {imageElement}
                   </a>
                 );
-              } else {
-                return (
-                  <Link
-                    key={slideKey}
-                    href={slide.link}
-                    className="slide-wrapper"
-                  >
-                    {imageElement}
-                  </Link>
-                );
               }
+
+              return (
+                <Link key={slideKey} href={slide.link} className="slide-wrapper block">
+                  {imageElement}
+                </Link>
+              );
             }
 
             return (

@@ -4,19 +4,15 @@ import { useEffect, useState } from "react";
 import jlf from "@/app/assests/image/jlf.png";
 import plf from "@/app/assests/image/plf.png";
 import thejaipur from "@/app/assests/image/thejaipur.png";
-import inksingleicon from "@/app/assests/image/inksingleicon.svg";
 import Link from "next/link";
-import BannerSlider from "./components/BannerSlider";
 import inkdouble1 from "@/app/assests/image/inkdouble1.svg";
 import inkdouble2 from "@/app/assests/image/inkdouble2.svg";
 import Loader from "./components/Loader";
-import { fetchAllBooks, processBookData } from "./API/booksapi";
 import { fetchHeroSections, processHeroSectionImages } from "./API/heroSectionApi";
 import { HelmetProvider } from "react-helmet-async";
 import { Helmet } from "react-helmet";
 import BookDiscovery from "./components/BookDiscovery";
 import BannerCarousel from "./components/BannerCarousel";
-import Spotlight from "./components/Spotlight";
 import AuthorSpotlightDynamic from "./components/AuthorSpotlightDynamic";
 
 export default function Home() {
@@ -30,7 +26,6 @@ export default function Home() {
         const apiImages = processHeroSectionImages(heroSections);
         setHeroImages(apiImages);
       } catch (error) {
-        console.error("Error loading hero sections:", error);
         setHeroImages([]);
       }finally{
         setLoading(false);
@@ -68,13 +63,7 @@ export default function Home() {
             </section>
 
             {/* <AuthorSpotlightDynamic /> */}
-            <AuthorSpotlightDynamic
-              // authorSlugs={[
-              // "ami-ganatra",
-              // "anand-ranganathan",
-              // "vivek-ranjan-agnihotri"
-              // ]}
-            />
+            <AuthorSpotlightDynamic/>
 
             <section className="container event mt-[80px] pb-[60px]">
               <div className="flex items-center justify-center gap-2 pb-6 ">

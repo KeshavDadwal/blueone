@@ -64,34 +64,6 @@ export default function BookDiscovery() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  //   const fetchBooks = async () => {
-  //     try {
-  //       setLoading(true);
-   
-  //       const res = await fetch(
-  //         "https://dashboard.bluone.ink/api/v1/public/books-list",
-  //         { cache: "no-store" }
-  //       );
-   
-  //       const data = await res.json();
-   
-  //       // Map API response to your tabs
-  //       setBooksByCategory({
-  //         "Bestsellers": data.bestsellers || [],
-  //         "New-Releases": data.newReleases || [],
-  //         "Coming-Soon": data.comingSoon || [],
-  //       });
-   
-  //     } catch (err) {
-  //       console.error(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-   
-  //   fetchBooks();
-  // }, []);
-
   const fetchBooks = async () => {
     try {
       setLoading(true);
@@ -174,8 +146,11 @@ export default function BookDiscovery() {
                   key={bookKey}
                   className="shrink-0 w-[50%] sm:w-[33.333%] md:w-[25%] lg:w-[16.666%]"
                 >
-                  <div className="w-full h-[300px] relative">
-                    <Link href={`/books/${book.slug}`}>
+                  <div className="w-full h-[300px]">
+                    <Link
+                      href={`/books/${book.slug}`}
+                      className="relative block w-full h-full"
+                    >
                       <Image
                         src={getCoverImage(book)}
                         alt={book.title}
