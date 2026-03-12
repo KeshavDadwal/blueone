@@ -2,17 +2,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from "next/navigation";
 import navbarLogo from "../assests/image/navbarLogo.png";
 import { IoCloseSharp } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 
-function NavBar() {
+function NavBar({ categoryCounts = {} }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
-  const [totalBooks, setTotalBooks] = useState({});
+  const totalBooks = categoryCounts || {};
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -41,23 +41,6 @@ function NavBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showSearchBar]);
-
-  useEffect(() => {
-    const fetchCategoryCounts = async () => {
-      try {
-        const res = await fetch(
-          "https://dashboard.bluone.ink/api/v1/public/books-list/count-by-category"
-        );
-        if (!res.ok) {
-          throw new Error("Failed to fetch category counts");
-        }
-        const data = await res.json();
-        setTotalBooks(data);
-      } catch (error) {
-      }
-    };
-    fetchCategoryCounts();
-  }, []);
 
   useEffect(() => {
     if (isOpen) {

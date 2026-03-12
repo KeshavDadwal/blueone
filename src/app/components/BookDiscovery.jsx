@@ -57,38 +57,10 @@ const getAuthorsWithLinks = (book) => {
   return authors; 
 };
 
-export default function BookDiscovery() {
+export default function BookDiscovery({ booksByCategory = {} }) {
   const sliderRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState("Bestsellers");
-  const [booksByCategory, setBooksByCategory] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-  const fetchBooks = async () => {
-    try {
-      setLoading(true);
- 
-      const res = await fetch(
-        "https://dashboard.bluone.ink/api/v1/public/books-list",
-        { cache: "no-store" }
-      );
- 
-      const data = await res.json();
-      setBooksByCategory({
-        "Bestsellers": data.bestsellers || [],
-        "New-Releases": data.newReleases || [],
-        "Coming-Soon": data.comingSoon || [],
-      });
- 
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
- 
-  fetchBooks();
-}, []);
+  const [loading, setLoading] = useState(false);
 
   const visibleBooks = useMemo(() => {
     return (booksByCategory[activeCategory] || []).slice(0, 15);

@@ -12,43 +12,14 @@ import {
   FaYoutube,
   FaGlobe,
 } from "react-icons/fa";
-import { fetchAuthorsBySlugs, processAuthorData } from "@/app/API/authorsApi";
 import CurveTop from "@/app/assests/image/aboutauthorbg.png";
 import inkdouble1 from "@/app/assests/image/inkdouble1.svg";
 import inkdouble2 from "@/app/assests/image/inkdouble2.svg";
-const AUTHOR_SLUGS = [
-  "ami-ganatra",
-  "anand-ranganathan",
-  "vivek-ranjan-agnihotri"
-];
-export default function AuthorSpotlightDynamic() {
-  const authorSlugs = AUTHOR_SLUGS;
-  const [authors, setAuthors] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function AuthorSpotlightDynamic({ authors = [] }) {
+  const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
-
-  useEffect(() => {
-    async function loadAuthors() {
-      try {
-        if (!authorSlugs.length) {
-          setAuthors([]);
-          return;
-        }
-        const authorsData = await fetchAuthorsBySlugs(authorSlugs);
-        setAuthors(authorsData);
-        setCurrentIndex(0);
-
-      } catch (error) {
-        console.error("Error loading authors:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadAuthors();
-  }, []);
 
   const nextAuthor = () => {
     setFadeOut(true);

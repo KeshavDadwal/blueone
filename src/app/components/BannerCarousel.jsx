@@ -56,7 +56,7 @@ export default function BannerCarousel({ images = [] }) {
     <>
       <div className="banner-carousel">
         <div
-          className="slider"
+          className="banner-slider"
           style={{
             transform: `translateX(-${current * 100}%)`,
             transition: transition ? 'transform 0.6s ease-in-out' : 'none',
@@ -91,7 +91,7 @@ export default function BannerCarousel({ images = [] }) {
                     href={slide.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="slide-wrapper block"
+                    className="banner-slide-wrapper block"
                   >
                     {imageElement}
                   </a>
@@ -99,14 +99,18 @@ export default function BannerCarousel({ images = [] }) {
               }
 
               return (
-                <Link key={slideKey} href={slide.link} className="slide-wrapper block">
+                <Link
+                  key={slideKey}
+                  href={slide.link}
+                  className="banner-slide-wrapper block"
+                >
                   {imageElement}
                 </Link>
               );
             }
 
             return (
-              <div key={slideKey} className="slide-wrapper">
+              <div key={slideKey} className="banner-slide-wrapper">
                 {imageElement}
               </div>
             );
@@ -114,100 +118,19 @@ export default function BannerCarousel({ images = [] }) {
         </div>
 
         {/* React Icon Arrows */}
-        <button className="arrow left" onClick={prevSlide}>
+        <button
+          className="banner-arrow banner-arrow-left"
+          onClick={prevSlide}
+        >
           <FiChevronLeft />
         </button>
-        <button className="arrow right" onClick={nextSlide}>
+        <button
+          className="banner-arrow banner-arrow-right"
+          onClick={nextSlide}
+        >
           <FiChevronRight />
         </button>
       </div>
-
-      <style jsx>{`
-        .banner-carousel {
-          position: relative;
-          width: 100%;
-          max-width: 1240px;          
-          height: 100%;
-          overflow: hidden;
-          margin:auto;
-          -webkit-box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
-    -moz-box-shadow: 0 8px 18px rgba(0,0,0,.35);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
-
-        }
-
-        .slider {
-          display: flex;
-          height: 100%;
-          width: 100%;
-        }
-
-        .slide-wrapper {
-          min-width: 100%;
-          width: 100%;
-          height: 100%;
-          flex-shrink: 0;
-          display: block;
-        }
-
-        .slider img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          display: block;
-        }
-
-        .arrow {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: rgba(0, 0, 0, 0.55);
-          color: #fff;
-          border: none;
-          cursor: pointer;
-          z-index: 5;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
-          transition: all 0.3s ease;
-        }
-
-        .arrow svg {
-          font-size: 28px;
-        }
-
-        .arrow:hover {
-          background: rgba(0, 0, 0, 0.75);
-          transform: translateY(-50%) scale(1.08);
-        }
-
-        .arrow.left {
-          left: 18px;
-        }
-
-        .arrow.right {
-          right: 18px;
-        }
-
-        @media (max-width: 768px) {
-          .banner-carousel {
-            height: 165px;
-          }
-
-          .arrow {
-            width: 44px;
-            height: 44px;
-          }
-
-          .arrow svg {
-            font-size: 22px;
-          }
-        }
-      `}</style>
     </>
   );
 }

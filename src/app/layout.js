@@ -5,8 +5,10 @@ import Header from "./components/Header";
 import Script from "next/script";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { fetchCategoryCounts } from "./API/categoryCountsApi";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const categoryCounts = await fetchCategoryCounts();
   return (
     <html lang="en">
       <head>
@@ -23,7 +25,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="flex flex-col min-h-screen">
         <Header />
-        <NavBar />
+        <NavBar categoryCounts={categoryCounts} />
         <div className="theme-wrapper mt-[60px]">{children}</div>
         <Footer />
         {/* Google Analytics Script */}
